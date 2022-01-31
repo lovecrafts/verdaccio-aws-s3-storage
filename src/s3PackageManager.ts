@@ -210,7 +210,7 @@ export default class S3PackageManager implements ILocalPackageManager {
           's3: [S3PackageManager readPackage] packageName: @{packageName} / data @{data}'
         );
         callback(null, data);
-      } catch (err) {
+      } catch (err: any) {
         this.logger.error({ err: err.message }, 's3: [S3PackageManager readPackage] @{err}');
         callback(err);
       }
@@ -266,7 +266,7 @@ export default class S3PackageManager implements ILocalPackageManager {
               Object.assign({}, baseS3Params, { Body: uploadStream, ACL: this.tarballACL })
             );
             // NOTE: there's a managedUpload.promise, but it doesn't seem to work
-            const promise = new Promise((resolve): void => {
+            const promise = new Promise<void>((resolve): void => {
               this.logger.debug('s3: [S3PackageManager writeTarball managedUpload] send');
               managedUpload.send((err, data) => {
                 if (err) {
@@ -324,7 +324,7 @@ export default class S3PackageManager implements ILocalPackageManager {
               try {
                 this.logger.debug('s3: [S3PackageManager writeTarball managedUpload abort]');
                 managedUpload.abort();
-              } catch (err) {
+              } catch (err: any) {
                 const error: HttpError = convertS3Error(err);
                 uploadStream.emit('error', error);
 
